@@ -1,8 +1,6 @@
 const sql = require("../..//utils/connection/db"); // connection to db
 
-const Company = (company) => {
-  this.name = company.name;
-};
+const Company = {};
 
 Company.getAllCompanies = async () => {
   const result = sql.query("select * from marketing.company");

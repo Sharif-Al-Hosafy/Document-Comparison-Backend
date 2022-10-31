@@ -32,3 +32,9 @@ create table file
 );
 
 ----------------------------------------------------------------------------
+
+-- insert users && hashing 
+
+insert into marketing.users (name,password) values ("العميد/ محمود السيد حسن",CONCAT('*', UPPER(SHA1(UNHEX(SHA1('160'))))) );
+insert into marketing.users (name,password) values ("االعميد/ طارق شعبان محمود",CONCAT('*', UPPER(SHA1(UNHEX(SHA1('161'))))) );
+insert into marketing.users (name,password) values ("أ/ عمرو صقر",CONCAT('*', UPPER(SHA1(UNHEX(SHA1('109'))))) );
