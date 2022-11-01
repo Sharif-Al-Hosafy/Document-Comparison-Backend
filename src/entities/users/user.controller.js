@@ -8,6 +8,8 @@ const getAllusers = async (req, res) => {
 
 const login = async (req, res) => {
   const { name, password } = req.body;
+  if (!name || !password)
+    throw createError(400, "Please fill the required fields");
   const savedHash = await User.getPassword(name); // get user's password
   const newHash = await User.hash(password); // hash the plain text
   if (savedHash[0].password !== newHash[0].password)

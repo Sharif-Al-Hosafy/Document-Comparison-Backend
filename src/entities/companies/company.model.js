@@ -7,4 +7,11 @@ Company.getAllCompanies = async () => {
   return result;
 };
 
+Company.insertNewCompany = async (name) => {
+  const result = sql.query(
+    `insert into marketing.company (name) values ('${name}') `
+  );
+  return result;
+};
+
 module.exports = Company;

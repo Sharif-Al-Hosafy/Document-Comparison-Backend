@@ -1,6 +1,6 @@
 const router = require("express").Router();
-const { getAllcompanies } = require("./company.controller");
+const { getAllcompanies, insertCompany } = require("./company.controller");
 
-router.route("/").get(getAllcompanies);
+router.route("/").get(getAllcompanies).post(insertCompany);
 
 module.exports = router;
