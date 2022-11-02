@@ -16,9 +16,11 @@ const errorHandler = require("./src/utils/errors/custom.error.handler");
 // app routes
 const companyRoutes = require("./src/entities/companies/company.router");
 const userRoutes = require("./src/entities/users/user.router");
+const fileRoutes = require("./src/entities/files/file.router");
 
 app.use("/api/v1/company", companyRoutes);
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/file", fileRoutes);
 
 //error Handling
 app.use(notFound);
