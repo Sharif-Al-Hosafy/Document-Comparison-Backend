@@ -7,9 +7,15 @@ const getAllcompanies = async (req, res) => {
 };
 
 const insertCompany = async (req, res) => {
-  const { name } = req.body;
+  let { name } = req.body;
   if (!name) throw createError(400, "Please Add Company Name");
-  const company = await Company.insertNewCompany();
+
+  name = name.trimStart().trimEnd(); // remove all unnecessary spaces
+
+  const isCompanyExist = await Company.getCompanyId(name); // if there is an id then the company is already inserted before
+  if (isCompanyExist) throw createError(400, "This Company Already Exists");
+
+  const company = await Company.insertNewCompany(name);
   res.status(200).json(company);
 };
 

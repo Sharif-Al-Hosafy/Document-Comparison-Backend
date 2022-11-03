@@ -16,4 +16,11 @@ File.insertNewFile = async (fileName, fileData, fileDate, companyId) => {
   return result;
 };
 
+File.isFileExist = async (companyId, fileName, date) => {
+  const file = sql.query(
+    `select id from marketing.file where name='${fileName}' and file_date = '${date}' and company_id = '${companyId[0].id}' `
+  );
+  return file;
+};
+
 module.exports = File;
