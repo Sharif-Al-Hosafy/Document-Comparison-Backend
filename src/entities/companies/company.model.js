@@ -2,9 +2,9 @@ const sql = require("../..//utils/connection/db"); // connection to db
 
 const Company = {};
 
-Company.getCompanyId = async (name) => {
+Company.getCompanyId = async (companyName) => {
   const result = sql.query(
-    `select id from marketing.company where name='${name}'`
+    `select id from marketing.company where companyName='${companyName}'`
   );
   return result;
 };
@@ -14,9 +14,9 @@ Company.getAllCompanies = async () => {
   return result;
 };
 
-Company.insertNewCompany = async (name) => {
+Company.insertNewCompany = async (companyName) => {
   const result = sql.query(
-    `insert into marketing.company (name) values ('${name}') `
+    `insert into marketing.company (companyName) values ('${companyName}') `
   );
   return result;
 };

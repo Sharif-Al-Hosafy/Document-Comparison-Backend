@@ -5,19 +5,19 @@ const File = {};
 File.insertNewFile = async (fileName, fileData, fileDate, companyId) => {
   var query = "INSERT INTO marketing.file SET ?",
     values = {
-      name: fileName,
-      file_data: fileData,
-      file_date: fileDate,
-      company_id: companyId[0].id,
+      fileName,
+      fileData,
+      fileDate,
+      companyId: companyId[0].id,
     };
   const result = sql.query(query, values);
 
   return result;
 };
 
-File.isFileExist = async (companyId, fileName, date) => {
+File.isFileExist = async (companyId, fileName, fileDate) => {
   const file = sql.query(
-    `select id from marketing.file where name='${fileName}' and file_date = '${date}' and company_id = '${companyId[0].id}' `
+    `select id from marketing.file where fileName='${fileName}' and fileDate = '${fileDate}' and companyId = '${companyId[0].id}' `
   );
   return file;
 };
@@ -31,7 +31,7 @@ File.getByIdAndUpdate = async (queryObj, fileId) => {
 
 File.getLatestFiles = async () => {
   const file = sql.query(
-    `select f.name,f.file_date,c.name from marketing.file f join marketing.company c on f.company_id = c.id order by f.id desc limit 10; `
+    `select f.id as id, f.fileName,f.fileDate,c.companyName from marketing.file f join marketing.company c on f.companyId = c.id order by f.id desc limit 10; `
   );
   return file;
 };

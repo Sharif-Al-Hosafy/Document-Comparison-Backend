@@ -15,25 +15,25 @@ const uploadFile = async (req, res) => {
 };
 
 const addNewFileToDb = async (req, res) => {
-  const { companyName, fileName, date } = req.body; // date
-  if (!companyName || !fileName || !date)
+  const { companyName, fileName, fileDate } = req.body; // date
+  if (!companyName || !fileName || !fileDate)
     throw createError(400, "Company Name, File Name or date are missing");
 
   const companyId = await Company.getCompanyId(companyName); // get company id
 
-  const isFileExist = await File.isFileExist(companyId, fileName, date);
+  const isFileExist = await File.isFileExist(companyId, fileName, fileDate);
   if (isFileExist.length > 0)
     throw createError(400, "This File Already Exists");
 
-  const data = await fs.readFile("./uploads/" + fileName, {
+  const fileData = await fs.readFile("./uploads/" + fileName, {
     encoding: "base64",
   }); // save pdf to db in base64
-  if (!data) throw createError(400, "No File Found");
+  if (!fileData) throw createError(400, "No File Found");
 
   const fileToDatabase = await File.insertNewFile(
     fileName,
-    data,
-    date,
+    fileData,
+    fileDate,
     companyId
   );
 
@@ -42,25 +42,25 @@ const addNewFileToDb = async (req, res) => {
 
 const updateFile = async (req, res) => {
   // get body elements
-  const { name, file_date, company_name } = req.body;
+  const { fileName, fileDate, companyName } = req.body;
   const queryObj = {};
 
-  if (name) {
-    queryObj.name = name;
+  if (fileName) {
+    queryObj.fileName = fileName;
 
-    const file_data = await fs.readFile("./uploads/" + name, {
+    const fileData = await fs.readFile("./uploads/" + fileName, {
       encoding: "base64",
     });
-    if (!file_data) throw createError(400, "No File Found");
-    queryObj.file_data = file_data;
+    if (!fileData) throw createError(400, "No File Found");
+    queryObj.fileData = fileData;
   }
 
-  if (file_date) queryObj.file_date = file_date;
+  if (fileDate) queryObj.fileDate = fileDate;
 
   /// company id change on company name
-  if (company_name) {
-    const company_id = await Company.getCompanyId(company_name); // get company id
-    queryObj.company_id = company_id[0].id;
+  if (companyName) {
+    const companyId = await Company.getCompanyId(companyName); // get company id
+    queryObj.companyId = companyId[0].id;
   }
 
   await File.getByIdAndUpdate(queryObj, req.params.id);
