@@ -40,6 +40,48 @@ const addNewFileToDb = async (req, res) => {
   res.status(201).json({ Message: "Success" });
 };
 
-//
+const updateFile = async (req, res) => {
+  // get body elements
+  const { name, file_date, company_name } = req.body;
+  const queryObj = {};
 
-module.exports = { uploadFile, addNewFileToDb };
+  if (name) {
+    queryObj.name = name;
+
+    const file_data = await fs.readFile("./uploads/" + name, {
+      encoding: "base64",
+    });
+    if (!file_data) throw createError(400, "No File Found");
+    queryObj.file_data = file_data;
+  }
+
+  if (file_date) queryObj.file_date = file_date;
+
+  /// company id change on company name
+  if (company_name) {
+    const company_id = await Company.getCompanyId(company_name); // get company id
+    queryObj.company_id = company_id[0].id;
+  }
+
+  await File.getByIdAndUpdate(queryObj, req.params.id);
+
+  res.status(200).json({ Message: "Success" });
+};
+
+const getLatestFiles = async (req, res) => {
+  const files = await File.getLatestFiles();
+  res.status(200).json(files);
+};
+
+const deleteFile = async (req, res) => {
+  const deletedFile = await File.deleteFile(req.params.id);
+  res.status(200).json(deletedFile);
+};
+
+module.exports = {
+  uploadFile,
+  addNewFileToDb,
+  updateFile,
+  deleteFile,
+  getLatestFiles,
+};
